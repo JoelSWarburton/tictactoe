@@ -15,7 +15,7 @@ function GameBoard() {
     console.log(gameBoard);
   };
 
-
+  const getBoard = () => gameBoard;
 
   const addMarker = (row, column, marker) => {
 
@@ -89,7 +89,8 @@ function GameBoard() {
   return {
     printBoard,
     addMarker,
-    checkGameWin
+    checkGameWin,
+    getBoard
   };
 }
 
@@ -158,7 +159,43 @@ function GameController() {
   printNewRound();
 
 
-  return {playRound, getActivePlayer, newGame}
+  return {playRound, getActivePlayer, newGame, getBoard: gameBoard.getBoard}
 }
 
-const gc = GameController();
+
+
+function ScreenController() {
+
+
+  const game = GameController();
+
+  //cache dom
+  const playerTurnDiv = document.querySelector("#turn");
+  const boardDiv = document.querySelector("#board");
+
+  
+
+  const update = () => {
+
+    const board = game.getBoard();
+
+    for(let i = 0; i < board.length; i++) {
+      for(let j = 0; j < board[i].length; j++) {
+        const button = document.createElement("button");
+        button.dataset.row = i;
+        button.dataset.col = j;
+        button.textContent = "Y";
+        boardDiv.appendChild(button);
+      }
+    }
+
+    const handleClick = (e) => {
+      console.log(e.target.dataset.row)
+    }
+
+    boardDiv.addEventListener('click', handleClick);
+  }
+
+  update();
+}
+ScreenController();
