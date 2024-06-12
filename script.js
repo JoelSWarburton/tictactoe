@@ -1,15 +1,22 @@
 function GameBoard() {
   const rows = 3;
   const columns = 3;
-  const gameBoard = [];
+  let gameBoard = [];
 
   //Initialise the board
-  for (let i = 0; i < rows; i++) {
-    gameBoard.push([]);
-    for (let j = 0; j < columns; j++) {
-      gameBoard[i].push("");
+  const newGame = () => {
+    gameBoard = []
+    for (let i = 0; i < rows; i++) {
+      gameBoard.push([]);
+      for (let j = 0; j < columns; j++) {
+        gameBoard[i].push("");
+      }
     }
-  }
+  };
+
+
+  newGame(); //initialise on first run
+
 
   const printBoard = () => {
     console.log(gameBoard);
@@ -90,7 +97,8 @@ function GameBoard() {
     printBoard,
     addMarker,
     checkGameWin,
-    getBoard
+    getBoard,
+    newGame
   };
 }
 
@@ -122,6 +130,7 @@ function GameController() {
     }
 
     const result = gameBoard.addMarker(row, col, getActivePlayer().marker);
+    console.log("The result " + result)
 
     if(!result) {
       console.log("Invalid placement!")
@@ -135,8 +144,11 @@ function GameController() {
       gameOver = true;
       return;
     }
+
+
     switchPlayerTurn();
     printNewRound();
+    
   }
 
   const printNewRound = () => {
@@ -151,15 +163,18 @@ function GameController() {
       console.log("finish current game first!")
       return;
     }
-    gameBoard = GameBoard();
+    gameBoard.newGame();
     gameOver = false;
+    switchPlayerTurn();
   }
 
   //initial round marker
   printNewRound();
 
 
-  return {playRound, getActivePlayer, newGame, getBoard: gameBoard.getBoard}
+  const hasGameFinished = () => gameOver; 
+
+  return {playRound, getActivePlayer, newGame, getBoard: gameBoard.getBoard, hasGameFinished}
 }
 
 
@@ -172,30 +187,67 @@ function ScreenController() {
   //cache dom
   const playerTurnDiv = document.querySelector("#turn");
   const boardDiv = document.querySelector("#board");
-
+  const newGameDiv = document.querySelector("#new-game");
+  
   
 
   const update = () => {
 
     const board = game.getBoard();
-
+    boardDiv.textContent = "";
+    console.log("Getting board...")
+    console.log(board);
     for(let i = 0; i < board.length; i++) {
       for(let j = 0; j < board[i].length; j++) {
         const button = document.createElement("button");
+
         button.dataset.row = i;
         button.dataset.col = j;
-        button.textContent = "Y";
+        button.textContent = board[i][j]
+        
+        
         boardDiv.appendChild(button);
       }
     }
 
-    const handleClick = (e) => {
-      console.log(e.target.dataset.row)
+    playerTurnDiv.textContent = game.getActivePlayer().name + "'s Turn";
+
+    if(game.hasGameFinished()) {
+      playerTurnDiv.textContent = game.getActivePlayer().name + " is the winner!";
+      addNewGame();
     }
 
+    
     boardDiv.addEventListener('click', handleClick);
   }
 
-  update();
+  const addNewGame = () => {
+    //only allow one copy of the button to exist
+    if(newGameDiv.hasChildNodes()) {
+      return;
+    }
+
+    const newGameButton = document.createElement("button");
+    newGameButton.textContent = "New game"
+    newGameButton.classList.add("newGame");
+   
+
+    newGameDiv.appendChild(newGameButton);
+
+    newGameButton.addEventListener("click", () => {
+      game.newGame();
+      update();
+      newGameDiv.textContent = "";
+    });
+  }
+
+
+  const handleClick = (e) => {
+    game.playRound(e.target.dataset.row, e.target.dataset.col)
+    update()
+  }
+
+
+  update(); //inital render of the board;
 }
 ScreenController();
