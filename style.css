@@ -1,1 +1,21 @@
+button {
+    width: 100px;
+    height: 100px;
+}
 
+#board {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
+    width: max-content;
+    gap: 10px;
+}
+
+.newGame {
+    height: auto;
+    width: auto;
+    padding: 10px;
+    font-size: 20px;
+
+    margin-top: 20px;
+}
