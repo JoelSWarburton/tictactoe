@@ -8,32 +8,38 @@
   <body>
     <h1>Tic Tac Toe</h1>
 
-    <div class="container">
-      <h2 id="turn"></h2>
-      <div id="board"></div>
-      <div id="new-game"></div>
-    </div>
+    <div class="page-wrap">
+      <div class="spacer"></div>
+      <div class="container">
+        <h2 id="turn"></h2>
+        <div id="board"></div>
+        <div id="new-game"></div>
+      </div>
 
-    <div class="players">
-      <h2>Players</h2>
-      <ul>
-        <li>
-          <input
-            id="player-x-label"
-            type="text"
-            placeholder="Player X"
-            value="Player X"
-          />
-        </li>
-        <li>
-          <input
-            id="player-y-label"
-            type="text"
-            placeholder="player Y"
-            value="Player Y"
-          />
-        </li>
-      </ul>
+      <div class="players">
+        <h2>Players</h2>
+        <p>Click a name below to rename player.</p>
+        <ul>
+          <li>
+            <p>X -</p>
+            <input
+              id="player-x-label"
+              type="text"
+              placeholder="Player X"
+              value="Player X"
+            />
+          </li>
+          <li>
+            <p>O -</p>
+            <input
+              id="player-o-label"
+              type="text"
+              placeholder="Player O"
+              value="Player O"
+            />
+          </li>
+        </ul>
+      </div>
     </div>
     <script src="./script.js"></script>
   </body>

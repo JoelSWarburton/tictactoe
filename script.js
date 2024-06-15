@@ -226,7 +226,7 @@ function ScreenController() {
   const boardDiv = document.querySelector("#board");
   const newGameDiv = document.querySelector("#new-game");
   const playerXLabel = document.querySelector("#player-x-label");
-  const playerYLabel = document.querySelector("#player-y-label");
+  const playerYLabel = document.querySelector("#player-o-label");
 
   const update = () => {
     const board = game.getBoard();
@@ -284,6 +284,7 @@ function ScreenController() {
   };
 
   const nameChange = (e) => {
+    e.target.classList.remove("invalid");
     let target = e.target.id;
     let newName = e.target.value;
 
@@ -294,7 +295,9 @@ function ScreenController() {
     //players names have to be unique;
     if (playerXLabel.value == playerYLabel.value) {
       console.log("names cannot be the same");
-      return;
+      e.target.classList.add("invalid");
+      e.target.value = e.target.placeholder;
+      newName = e.target.placeholder;
     }
 
     game.changeName(target, newName);
